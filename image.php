@@ -11,8 +11,7 @@ if ($img) {
     }
     echo $img;
 } else {
-    $i = $i;
-    $_SESSION['i'] = $i;
+    setcookie("i", $_COOKIE['i'], time()+3600, '/');
 }
 
 
