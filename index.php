@@ -19,20 +19,17 @@ function plural_form($n, $forms) {
 */
 function calculate($number1, $number2, $operation)
     {
-        if ( $_POST['operation'] == 'plus') { //сложение
-            return $number1 + $number2;
-        }
-        if ( $_POST['operation'] == 'minus') { //вычитание
-            return $number1 - $number2;
-        }
-        if ( $_POST['operation'] == 'multiply') { //умножение
-            return $number1 * $number2;
-        }
-        if ( $_POST['split'] == 'plus') { //деление
-            return $number1 / $number2;
+        switch ($_POST['operation']) {
+            case 'plus':
+                return $number1 + $number2;
+            case  'minus':
+                return $number1 - $number2;
+            case 'multiply':
+                return $number1 * $number2;
+           case 'split':
+            return round($number1 / $number2, 2);
         }
     }
-
 
 ?>
 
@@ -60,20 +57,29 @@ function calculate($number1, $number2, $operation)
     <p>Создать форму-калькулятор c операциями: сложение, вычитание, умножение, деление. Выбор операции можно осуществлять с помощью тега select</p>
     <div class="calc">
         <form method="post" action="/">
-            <input autocomplete="off" name="first_num" type="text">
+            <input autocomplete="off" name="first_num" type="number">
             <select name="operation">
                 <option value="plus">+</option>
                 <option value="minus">-</option>
                 <option value="multiply">*</option>
                 <option value="split">/</option>
             </select>
-            <input autocomplete="off" name="second_num" type="text">
+            <input autocomplete="off" name="second_num" type="number">
             <input type="submit" name="enter" value="=">
             <div class="result">
                 <p>Результат <?= $_POST['first_num'] . " " . $_POST['operation'] . " " . $_POST['second_num'] ?> = </p>
                 <b>
                 <?php
-                if (isset($_POST) && isset($_POST[first_num]) && isset($_POST['second_num']) && !empty($_POST['operation'])) {
+                if (!is_numeric($_POST['first_num']) || !is_numeric($_POST['second_num'])) {
+                    echo "Калькулятор работает только с числами!";
+                } else if (strlen($_POST['first_num']) > 10 || strlen($_POST['second_num']) > 10) {
+                    echo "К сожалению, этот калькулятор не может работать с такими большими числами...";
+                } else if (
+                isset($_POST)
+                && isset($_POST['first_num'])
+                && isset($_POST['second_num'])
+                && !empty($_POST['operation'])
+                ) {
                     if ($_POST['second_num'] == 0 && $_POST['operation'] == 'split') {
                         echo "На ноль делить нельзя!";
                     } else {
